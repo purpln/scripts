@@ -1,9 +1,7 @@
 # info
 
 psutil
-cachelib
-WMI
-
+popen('python').read()
 
 # image
 

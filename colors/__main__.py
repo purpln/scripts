@@ -43,9 +43,9 @@ def convertImage(path, pixels):
 
 
 def main():
-    parser = ArgumentParser(description='Display image to terminal')
-    parser.add_argument('-img', help='Image file to display', default=None)
-    parser.add_argument('-width', default=80, help='Character width of output', type=int)
+    parser = ArgumentParser(description='display image to terminal')
+    parser.add_argument('-i', '--img', help='image file to display', default='./picture.jpg')
+    parser.add_argument('-w', '--width', help='width of output', default=80, type=int)
     args = parser.parse_args()
 
     start_time = time()
