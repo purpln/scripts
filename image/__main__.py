@@ -1,15 +1,25 @@
 from time import time
 from colors import items
 from PIL import Image
+import numpy as np
 from numpy import asarray
 from argparse import ArgumentParser
 
-def rgb8(value):
-    r, g, b = [int(c/51) for c in value]
+start_time = time()
+
+def rgb8algorithm(query):
+    r, g, b = [int(c/51) for c in query]
     return 16 + 36*r + 6*g + b
 
-def rgb(query):
+def rgb8palette(query):
     return min( items, key = lambda subject: sum( (s - q) ** 2 for s, q in zip( items.get(subject), query ) ) )
+
+def closest(query):
+    colors = np.array(list(items.values()))
+    color = np.array(query)
+    distances = np.sqrt(np.sum((colors-color)**2, axis=1))
+    index_of_smallest = np.where(distances == np.amin(distances))
+    return index_of_smallest[0][0]
 
 def img_8bit(array):
     out = []
@@ -26,11 +36,13 @@ def convert(list): return tuple(i for i in list)
 
 def convertArray(array):
     out = []
+    print('{:.2f} seconds'.format(time() - start_time) )
     for y in array:
         yArray = []
         for x in y:
-            yArray.append(rgb(convert(x)))
+            yArray.append( closest(convert(x)) )
         out.append(yArray)
+    print('{:.2f} seconds'.format(time() - start_time) )
     return out
 
 def convertImage(path, pixels):
@@ -47,8 +59,6 @@ def main():
     parser.add_argument('-i', '--img', help='image file to display', default='./picture.jpg')
     parser.add_argument('-w', '--width', help='width of output', default=80, type=int)
     args = parser.parse_args()
-
-    start_time = time()
     
     print(img_8bit(convertImage(args.img, args.width)))
 
