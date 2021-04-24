@@ -24,26 +24,14 @@ def closest(query):
 def img_8bit(array):
     out = []
     for y in range(int(len(array)/2)):
-        if y != 0: out.append('\n')
         for x in range(len(array[y])):
-            top_col = '{}'.format(array[2*y][x])
-            bot_col = '{}'.format(array[2*y+1][x])
+            top_col = '{}'.format(closest(array[2*y][x]))
+            bot_col = '{}'.format(closest(array[2*y+1][x]))
             out.append(''.join(('\x1B[38;5;', bot_col, ';48;5;', top_col, 'm▄')))
-        out.append('\033[0m')
+        out.append('\033[0m\n')
     return ''.join(out)
 
 def convert(list): return tuple(i for i in list)
-
-def convertArray(array):
-    out = []
-    print('{:.2f} seconds'.format(time() - start_time) )
-    for y in array:
-        yArray = []
-        for x in y:
-            yArray.append( closest(convert(x)) )
-        out.append(yArray)
-    print('{:.2f} seconds'.format(time() - start_time) )
-    return out
 
 def convertImage(path, pixels):
     original = Image.open(path)
@@ -51,7 +39,7 @@ def convertImage(path, pixels):
     height = int(height/(width/pixels))
     width = pixels
     image = original.resize((width, height))
-    return convertArray(asarray(image))
+    return asarray(image)
 
 
 def main():
